@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 import logging
 
-from torch.cuda.amp import GradScaler
+import torch
 
 from config import Config
 from data import get_dataloaders
@@ -75,7 +75,10 @@ def main(cfg: Config) -> dict[str, float]:
     # =======================
     optimizer = build_optimizer(model, cfg)
     scheduler = build_scheduler(optimizer, train_loader, cfg)
-    scaler = GradScaler(enabled=(cfg.device == "cuda" and cfg.use_amp))
+    scaler = torch.amp.GradScaler(
+        "cuda",
+        enabled=(cfg.device == "cuda" and cfg.use_amp),
+    )
     ema = EMA(model, decay=cfg.ema_decay)
 
     # =======================

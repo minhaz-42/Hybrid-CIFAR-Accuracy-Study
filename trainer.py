@@ -8,7 +8,7 @@ from typing import Any, Dict
 
 import torch
 import torch.nn as nn
-from torch.cuda.amp import GradScaler, autocast
+from torch import amp
 from torch.utils.data import DataLoader
 
 from config import Config
@@ -111,7 +111,7 @@ def train_one_epoch(
     criterion: nn.Module,
     optimizer: torch.optim.Optimizer,
     scheduler: torch.optim.lr_scheduler.OneCycleLR,
-    scaler: GradScaler,
+    scaler: amp.GradScaler,
     ema: EMA,
     device: str,
     use_amp: bool,
@@ -166,9 +166,18 @@ def train_one_epoch(
 
         optimizer.zero_grad(set_to_none=True)
 
-        with autocast(enabled=use_amp):
+        with amp.autocast(device_type="cuda", enabled=use_amp):
             outputs = model(images)
             loss = criterion(outputs, targets)
+
+        if not torch.isfinite(loss):
+            logger.warning(
+                "Skipping non-finite loss at epoch %d batch %d.",
+                epoch,
+                batch_idx,
+            )
+            optimizer.zero_grad(set_to_none=True)
+            continue
 
         scaler.scale(loss).backward()
         scaler.unscale_(optimizer)
@@ -204,7 +213,7 @@ def train(
     val_loader: DataLoader,
     optimizer: torch.optim.Optimizer,
     scheduler: torch.optim.lr_scheduler.OneCycleLR,
-    scaler: GradScaler,
+    scaler: amp.GradScaler,
     ema: EMA,
     cfg: Config,
 ) -> Dict[str, Any]:

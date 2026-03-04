@@ -86,7 +86,7 @@ class Config:
 
     # ----- data -----------------------------------------------------------
     batch_size: int = 128
-    num_workers: int = 4
+    num_workers: int = 2
 
     # ----- CNN stem -------------------------------------------------------
     cnn_channels: list = None  # set in __init__
@@ -104,16 +104,16 @@ class Config:
 
     # ----- training -------------------------------------------------------
     epochs: int = 150
-    lr: float = 0.1
+    lr: float = 3e-4
     momentum: float = 0.9
-    weight_decay: float = 5e-4
+    weight_decay: float = 0.05
     nesterov: bool = True
     grad_clip_norm: float = 1.0
     ema_decay: float = 0.999
     use_amp: bool = True
 
     # ----- OneCycleLR scheduler -------------------------------------------
-    onecycle_max_lr: float = 0.1
+    onecycle_max_lr: float = 3e-4
     onecycle_pct_start: float = 0.1
     onecycle_div_factor: float = 25.0
     onecycle_final_div_factor: float = 1e4
