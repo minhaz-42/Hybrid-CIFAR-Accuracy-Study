@@ -61,18 +61,20 @@ Input (3 × 32 × 32)
 ```
 Hybrid CIFAR Accuracy Study/
 │
-├── data/                  # Downloaded CIFAR datasets
-├── models/                # (reserved for saved model artefacts)
-├── checkpoints/           # Best model checkpoint (.pth)
-├── logs/                  # training_log.csv
-├── plots/                 # loss, accuracy, LR, confusion matrix PNGs
-├── results/               # metrics.txt, confusion_matrix.csv
-│
-├── config.py              # All hyperparameters and paths
+├── config.py              # Central configuration and paths
 ├── model.py               # Hybrid CNN-ViT architecture
-├── utils.py               # Data loading, EMA, logging, plotting, eval
-├── training.py            # Main training script (entry point)
-└── README.md              # This file
+├── data.py                # Data transforms and dataloaders
+├── trainer.py             # Optimizer/scheduler/train loop
+├── evaluator.py           # Validation/evaluation/confusion matrix logic
+├── visualization.py       # Reusable plotting helpers
+├── utils.py               # Seed/device/EMA/checkpoint/csv helpers
+├── training.py            # Orchestration entry point (CLI + notebook wrapper)
+├── notebooks/
+│   └── colab_demo.ipynb   # Notebook usage demo
+├── logs/
+├── checkpoints/
+├── plots/
+└── results/
 ```
 
 ---
@@ -124,19 +126,27 @@ python training.py --dataset cifar100 --epochs 200 --lr 0.05 --batch-size 256
 pip install torch torchvision matplotlib numpy
 ```
 
-### 2. Train on CIFAR-10
+### 2. Train on CIFAR-10 (CLI)
 
 ```bash
 python training.py --dataset cifar10
 ```
 
-### 3. Train on CIFAR-100
+### 3. Train on CIFAR-100 (CLI)
 
 ```bash
 python training.py --dataset cifar100
 ```
 
-### 4. Outputs
+### 4. Run inside notebook / Colab
+
+```python
+from training import run_experiment
+
+run_experiment(dataset="cifar10", epochs=150, batch_size=128, seed=42)
+```
+
+### 5. Outputs
 
 After training completes:
 
