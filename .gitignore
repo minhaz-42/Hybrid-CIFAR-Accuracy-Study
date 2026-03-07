@@ -37,6 +37,9 @@ ENV/
 *.joblib
 *.sqlite3
 *.db
+*.tar.gz
+data/cifar-10-batches-py/
+data/cifar-100-python/
 
 # OS
 .DS_Store
