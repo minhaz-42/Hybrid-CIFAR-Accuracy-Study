@@ -46,7 +46,8 @@ data/cifar-100-python/
 Thumbs.db
 
 # Logs
-logs/
+!logs/
+!logs/**
 
 # Checkpoints
 checkpoints/
@@ -55,7 +56,8 @@ checkpoints/
 models/
 
 # Plots
-plots/
+!plots/
+!plots/**
 
 # Results
 results/
