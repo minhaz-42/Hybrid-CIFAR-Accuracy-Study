@@ -171,6 +171,19 @@ hardware and driver versions.
 > These figures are in line with the published literature for hybrid
 > CNN-ViT models of comparable size trained from scratch on CIFAR.
 
+### Training Plots
+
+| Plot | Description |
+|------|-------------|
+| ![Accuracy Curves](plots/01_accuracy_curves.png) | Validation accuracy across all three experiments |
+| ![Loss Curves](plots/02_loss_curves.png) | Training and validation loss curves |
+| ![LR Schedule](plots/03_learning_rate_schedule.png) | OneCycleLR learning rate schedule |
+| ![Generalisation Gap](plots/04_generalization_gap.png) | Train vs validation accuracy gap over epochs |
+| ![Confusion Matrix](plots/05_confusion_matrix.png) | Per-class confusion matrix (Hybrid CNN-ViT) |
+| ![Per-Class Accuracy](plots/06_per_class_accuracy.png) | Per-class top-1 accuracy breakdown |
+| ![Training Dashboard](plots/07_training_dashboard.png) | Full training dashboard across all experiments |
+| ![Training Phases](plots/08_training_phases.png) | Five-phase training breakdown |
+
 ---
 
 ## Requirements

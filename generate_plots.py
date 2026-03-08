@@ -103,6 +103,25 @@ def style_axis(ax, title: str, xlabel: str, ylabel: str):
     ax.spines["right"].set_visible(False)
 
 
+def plot_zigzag_series(ax, x, y, color, label, sparse_threshold=60):
+    """Draw a series with marker-forward styling so zigzags remain visible."""
+    is_sparse = len(x) <= sparse_threshold
+    marker = "o" if is_sparse else None
+    marker_size = 4.0 if is_sparse else 0
+    line_width = 1.6 if is_sparse else 1.8
+    ax.plot(
+        x,
+        y,
+        color=color,
+        linewidth=line_width,
+        marker=marker,
+        markersize=marker_size,
+        markerfacecolor="white" if is_sparse else color,
+        markeredgewidth=1.0 if is_sparse else 0,
+        label=label,
+    )
+
+
 # ---------------------------------------------------------------------------
 # Plot 1: Training & Validation Accuracy
 # ---------------------------------------------------------------------------
@@ -111,8 +130,8 @@ def plot_accuracy(data: dict):
     fig, ax = plt.subplots(figsize=(10, 6), facecolor="white")
 
     ep = data["epochs"]
-    ax.plot(ep, data["train_acc"], color=C_TRAIN, linewidth=1.8, label="Train Accuracy")
-    ax.plot(ep, data["val_acc"], color=C_VAL, linewidth=1.8, label="Val Accuracy")
+    plot_zigzag_series(ax, ep, data["train_acc"], C_TRAIN, "Train Accuracy")
+    plot_zigzag_series(ax, ep, data["val_acc"], C_VAL, "Val Accuracy")
 
     # Mark best epoch
     best_idx = np.argmax(data["val_acc"])
@@ -148,8 +167,8 @@ def plot_loss(data: dict):
     fig, ax = plt.subplots(figsize=(10, 6), facecolor="white")
 
     ep = data["epochs"]
-    ax.plot(ep, data["train_loss"], color=C_TRAIN, linewidth=1.8, label="Train Loss")
-    ax.plot(ep, data["val_loss"], color=C_VAL, linewidth=1.8, label="Val Loss")
+    plot_zigzag_series(ax, ep, data["train_loss"], C_TRAIN, "Train Loss")
+    plot_zigzag_series(ax, ep, data["val_loss"], C_VAL, "Val Loss")
 
     # Mark minimum val loss
     min_idx = np.argmin(data["val_loss"])
@@ -338,8 +357,8 @@ def plot_dashboard(data: dict):
 
     # --- Top-left: Accuracy ---
     ax1 = fig.add_subplot(gs[0, 0])
-    ax1.plot(ep, data["train_acc"], color=C_TRAIN, linewidth=1.8, label="Train")
-    ax1.plot(ep, data["val_acc"], color=C_VAL, linewidth=1.8, label="Validation")
+    plot_zigzag_series(ax1, ep, data["train_acc"], C_TRAIN, "Train")
+    plot_zigzag_series(ax1, ep, data["val_acc"], C_VAL, "Validation")
     best_idx = np.argmax(data["val_acc"])
     ax1.scatter([ep[best_idx]], [data["val_acc"][best_idx]], color=C_BEST, s=50, zorder=5, edgecolors="white")
     style_axis(ax1, "Accuracy", "Epoch", "Accuracy (%)")
@@ -348,8 +367,8 @@ def plot_dashboard(data: dict):
 
     # --- Top-right: Loss ---
     ax2 = fig.add_subplot(gs[0, 1])
-    ax2.plot(ep, data["train_loss"], color=C_TRAIN, linewidth=1.8, label="Train")
-    ax2.plot(ep, data["val_loss"], color=C_VAL, linewidth=1.8, label="Validation")
+    plot_zigzag_series(ax2, ep, data["train_loss"], C_TRAIN, "Train")
+    plot_zigzag_series(ax2, ep, data["val_loss"], C_VAL, "Validation")
     style_axis(ax2, "Loss", "Epoch", "Loss")
     ax2.legend(fontsize=8, loc="upper right")
 
@@ -400,8 +419,8 @@ def plot_training_phases(data: dict):
                  fontweight="bold", color=text_color)
 
     # Top: Accuracy
-    ax1.plot(ep, data["train_acc"], color=C_TRAIN, linewidth=1.8, label="Train Acc")
-    ax1.plot(ep, data["val_acc"], color=C_VAL, linewidth=1.8, label="Val Acc")
+    plot_zigzag_series(ax1, ep, data["train_acc"], C_TRAIN, "Train Acc")
+    plot_zigzag_series(ax1, ep, data["val_acc"], C_VAL, "Val Acc")
     best_idx = np.argmax(data["val_acc"])
     ax1.scatter([ep[best_idx]], [data["val_acc"][best_idx]], color=C_BEST, s=60, zorder=5,
                 edgecolors="white", linewidth=1.5)
@@ -411,8 +430,8 @@ def plot_training_phases(data: dict):
     ax1.set_ylim(15, 100)
 
     # Bottom: Loss
-    ax2.plot(ep, data["train_loss"], color=C_TRAIN, linewidth=1.8, label="Train Loss")
-    ax2.plot(ep, data["val_loss"], color=C_VAL, linewidth=1.8, label="Val Loss")
+    plot_zigzag_series(ax2, ep, data["train_loss"], C_TRAIN, "Train Loss")
+    plot_zigzag_series(ax2, ep, data["val_loss"], C_VAL, "Val Loss")
     style_axis(ax2, "", "Epoch", "Loss")
     ax2.legend(loc="upper right", fontsize=9)
 

@@ -362,6 +362,18 @@ Input image    (B × 3 × 32 × 32)
 | **Validation accuracy comparison** | Clear staircase: ~85.6% → ~88.8% → ~91.88% |
 | **Train−Val accuracy gap (Exp 3)** | Gap stays below 6% until epoch ~130, indicating controlled generalisation across the full 150 epochs |
 
+### Accuracy Curves
+
+![Accuracy Curves](plots/01_accuracy_curves.png)
+
+### Loss Curves
+
+![Loss Curves](plots/02_loss_curves.png)
+
+### Generalisation Gap
+
+![Generalisation Gap](plots/04_generalization_gap.png)
+
 ---
 
 ## Section 9: Per-Class Metrics & Confusion Matrix Analysis
@@ -384,6 +396,14 @@ Based on the confusion patterns from Experiments 1 and 2, we predict:
 - **Easiest classes:** Automobile, Ship, Truck — distinctive shapes, uncommon textures
 - **Hardest classes:** Cat, Dog — very similar textures and body shapes; 32×32 resolution loses breed-discriminative detail
 - **Secondary hard pair:** Bird, Airplane — similar silhouettes when viewed against plain backgrounds
+
+### Confusion Matrix
+
+![Confusion Matrix](plots/05_confusion_matrix.png)
+
+### Per-Class Accuracy
+
+![Per-Class Accuracy](plots/06_per_class_accuracy.png)
 
 ---
 
@@ -427,6 +447,10 @@ Based on the confusion patterns from Experiments 1 and 2, we predict:
 
 > **Key insight from ablation:** The two most impactful components are the CNN stem (−4.4% if removed) and RandAugment (−1.1% if removed). The Transformer hyperparameters (depth, heads) are relatively robust within ±2 of the chosen values.
 
+### Training Dashboard
+
+![Training Dashboard](plots/07_training_dashboard.png)
+
 ### Why Did Each Jump Happen?
 
 > **Exp 1 → Exp 2 (+3.2%):** Residual connections enabled a 4th stage without gradient vanishing, increasing the depth-wise effective receptive field. Global Average Pooling added spatial invariance while reducing over-parameterisation in the classifier head.
@@ -450,6 +474,14 @@ Based on the confusion patterns from Experiments 1 and 2, we predict:
 | **5 — Plateau** | 122–150 | Near-zero LR | Training acc reaches 97%+ but val holds steady → mild late-stage overfitting | ~91.5% |
 
 > **Checkpoint selection:** The best checkpoint is saved at the epoch with the highest *EMA-weighted validation accuracy* — epoch 121 at 91.88%. Running longer would only increase the train/val gap without improving generalisation.
+
+### Training Phases
+
+![Training Phases](plots/08_training_phases.png)
+
+### Learning Rate Schedule
+
+![Learning Rate Schedule](plots/03_learning_rate_schedule.png)
 
 ### Final Results Summary
 
